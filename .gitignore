@@ -1,0 +1,14 @@
+# Colcon / ROS2
+ws/
+build/
+install/
+log/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*~
+
+# OS
+.DS_Store
