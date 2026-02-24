@@ -1,0 +1,17 @@
+# Colcon / ROS2
+ws/
+build/
+install/
+log/
+.git/
+.gitignore
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+
+# E2E output (host-mounted at run time)
+e2e_output/

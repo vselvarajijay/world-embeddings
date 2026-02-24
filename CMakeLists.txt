@@ -14,7 +14,8 @@ find_package(sensor_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(Eigen3 REQUIRED)
-find_package(OpenCV REQUIRED)
+find_package(OpenCV REQUIRED COMPONENTS core imgproc imgcodecs dnn)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 find_package(onnxruntime REQUIRED)
 
 # nlohmann/json via FetchContent
@@ -43,16 +44,17 @@ target_link_libraries(world_embeddings
   PUBLIC
     Eigen3::Eigen
     nlohmann_json::nlohmann_json
-  PRIVATE
     opencv_core
     opencv_imgproc
     opencv_imgcodecs
+    opencv_dnn
+  PRIVATE
     onnxruntime::onnxruntime
 )
 
 # Node executable
 add_executable(world_embeddings_node src/world_embeddings_node.cpp)
-target_link_libraries(world_embeddings_node PRIVATE world_embeddings)
+target_link_libraries(world_embeddings_node world_embeddings)
 ament_target_dependencies(world_embeddings_node rclcpp sensor_msgs std_msgs cv_bridge)
 
 # Install

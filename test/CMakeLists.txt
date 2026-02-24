@@ -2,25 +2,25 @@ find_package(ament_cmake_gtest REQUIRED)
 find_package(rclcpp REQUIRED)
 
 ament_add_gtest(test_association test_association.cpp)
-target_link_libraries(test_association PRIVATE world_embeddings)
+target_link_libraries(test_association world_embeddings)
 ament_target_dependencies(test_association rclcpp)
 
 ament_add_gtest(test_entity_store test_entity_store.cpp)
-target_link_libraries(test_entity_store PRIVATE world_embeddings)
+target_link_libraries(test_entity_store world_embeddings)
 ament_target_dependencies(test_entity_store rclcpp)
 
 ament_add_gtest(test_snapshot test_snapshot.cpp)
-target_link_libraries(test_snapshot PRIVATE world_embeddings)
+target_link_libraries(test_snapshot world_embeddings)
 ament_target_dependencies(test_snapshot rclcpp)
 
 ament_add_gtest(test_pipeline_integration test_pipeline_integration.cpp)
-target_link_libraries(test_pipeline_integration PRIVATE world_embeddings)
+target_link_libraries(test_pipeline_integration world_embeddings)
 ament_target_dependencies(test_pipeline_integration rclcpp)
 
 ament_add_gtest(test_encoder test_encoder.cpp)
-target_link_libraries(test_encoder PRIVATE world_embeddings)
+target_link_libraries(test_encoder world_embeddings)
 ament_target_dependencies(test_encoder rclcpp)
 
 ament_add_gtest(test_detector test_detector.cpp)
-target_link_libraries(test_detector PRIVATE world_embeddings)
+target_link_libraries(test_detector world_embeddings)
 ament_target_dependencies(test_detector rclcpp)

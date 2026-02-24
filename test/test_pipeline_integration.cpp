@@ -59,7 +59,7 @@ TEST(PipelineIntegration, NewObservationCreatesNewEntity) {
   obs2.normalize();
   auto match = association.find_match(obs2, Pose3D{0.f, 0.f, 0.f}, store.get_candidates());
   EXPECT_FALSE(match.has_value());
-  EntityId id2 = store.add_entity(obs2, Pose3D{0.f, 0.f, 0.f}, 2, 1.0f, "b");
+  store.add_entity(obs2, Pose3D{0.f, 0.f, 0.f}, 2, 1.0f, "b");
   auto all = store.get_all_entities();
   EXPECT_EQ(all.size(), 2u);
 }

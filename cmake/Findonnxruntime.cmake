@@ -1,0 +1,23 @@
+# Find ONNX Runtime: prefer ONNXRUNTIME_ROOT (prebuilt tarball), else CONFIG.
+if(DEFINED ENV{ONNXRUNTIME_ROOT})
+  set(ONNXRUNTIME_ROOT "$ENV{ONNXRUNTIME_ROOT}" CACHE PATH "ONNX Runtime root")
+endif()
+if(DEFINED ONNXRUNTIME_ROOT)
+  set(onnxruntime_INCLUDE_DIR "${ONNXRUNTIME_ROOT}/include")
+  set(onnxruntime_LIBRARY "${ONNXRUNTIME_ROOT}/lib/libonnxruntime.so")
+  if(NOT EXISTS "${onnxruntime_LIBRARY}")
+    set(onnxruntime_LIBRARY "${ONNXRUNTIME_ROOT}/lib/libonnxruntime.so.1")
+  endif()
+  if(EXISTS "${onnxruntime_LIBRARY}")
+    add_library(onnxruntime::onnxruntime SHARED IMPORTED)
+    set_target_properties(onnxruntime::onnxruntime PROPERTIES
+      IMPORTED_LOCATION "${onnxruntime_LIBRARY}"
+      INTERFACE_INCLUDE_DIRECTORIES "${onnxruntime_INCLUDE_DIR}")
+    set(onnxruntime_FOUND TRUE)
+  endif()
+endif()
+if(NOT onnxruntime_FOUND)
+  find_package(onnxruntime CONFIG QUIET)
+endif()
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(onnxruntime DEFAULT_MSG onnxruntime_FOUND)

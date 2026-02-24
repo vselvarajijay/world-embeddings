@@ -69,6 +69,9 @@ If `yolo_onnx_path` or `clip_onnx_path` is empty, the node runs but does not pro
 world-embeddings/
 ├── CMakeLists.txt
 ├── package.xml
+├── Dockerfile
+├── docker-compose.yml
+├── cmake/Findonnxruntime.cmake
 ├── include/world_embeddings/   # Public API
 │   ├── types.hpp
 │   ├── association.hpp
@@ -78,9 +81,46 @@ world-embeddings/
 │   └── detector.hpp
 ├── src/                        # Library + node
 ├── test/                       # Unit and integration tests
+├── scripts/run_e2e.py         # E2E test: publish images, assert snapshot
 ├── config/params.yaml
+├── config/params.e2e.yaml     # E2E overrides (snapshot path, interval)
 └── launch/world_embeddings.launch.py
 ```
+
+## Docker
+
+Build and run the node in a container (ROS 2 Humble, ONNX Runtime, Eigen, OpenCV):
+
+```bash
+docker build -t world-embeddings .
+docker run --rm -v /tmp/we_snapshot:/data world-embeddings \
+  ros2 launch world_embeddings world_embeddings.launch.py \
+  params_file:=/ros_ws/install/world_embeddings/share/world_embeddings/config/params.e2e.yaml
+```
+
+Snapshot will be written to `/data/snapshot.json` in the container (e.g. into `/tmp/we_snapshot` on the host).
+
+### Docker Compose
+
+Run the node and the end-to-end test together:
+
+```bash
+docker-compose up --build
+```
+
+- **world_embeddings** — runs the node with e2e params (short snapshot interval, output under `/data`).
+- **e2e_test** — after a short delay, publishes synthetic images to `/camera/image_raw`, waits for the snapshot file, then asserts on its structure (entities array, embedding and pose fields). Without ONNX models the node produces 0 entities; the test still validates that the snapshot is written and has the expected shape.
+
+To run only the e2e test (node must already be running):
+
+```bash
+docker-compose up -d world_embeddings
+sleep 6
+docker-compose run --rm e2e_test
+docker-compose down
+```
+
+Optional: mount ONNX models and set `yolo_onnx_path` / `clip_onnx_path` in a params file for full pipeline e2e; then set `WORLD_EMBEDDINGS_EXPECT_ENTITIES=1` when running the e2e container to assert at least one entity and non-empty embeddings.
 
 ## Visualization
 

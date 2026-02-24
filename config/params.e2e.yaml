@@ -1,0 +1,13 @@
+# E2E test overrides: short snapshot interval, output under /data for shared volume
+world_embeddings_node:
+  ros__parameters:
+    image_topic: "/camera/image_raw"
+    snapshot_path: "/data/snapshot.json"
+    snapshot_interval_sec: 2.0
+    yolo_onnx_path: ""
+    clip_onnx_path: ""
+    association_match_threshold: 0.7
+    association_max_pose_distance: 5.0
+    association_weight_embedding: 0.8
+    association_weight_pose: 0.2
+    ema_alpha: 0.9
